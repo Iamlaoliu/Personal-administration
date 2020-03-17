@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <div>
+                <h3>panel title</h3>
+            </div>
+            <div>
+                <label for="">ID:<input type="text" v-model="id" /></label>
+                <label for="">Name:<input type="text" v-model="name" @keyup.enter="add" /></label>
+                <input type="button" value="添加" class="" @click="add">
+
+                <!-- 注意：Vue中所有的指令，在调用的时候，都以 v- 开头  -->
+                <label for="">搜索名称关键字:<input type="text" placeholder="请输入关键字" v-model="keywords" v-focus
+                        v-color></label>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Ctime</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in search(keywords)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.ctime | capitalize}}</td>
+                    <td><button type="button" @click="del(item.id)">删除</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        //全局的过滤器，进行时间的格式化
+        Vue.filter('capitalize', function (dateStr, pattern = "") {
+            console.log(pattern);
+            //根据指定的时间字符串，得到特定的时间
+            console.log(dateStr);
+            var dt = new Date(dateStr);
+
+            //yyyy-mm-dd
+            var y = dt.getFullYear();
+            var m = (dt.getMonth() + 1).toString().padStart(2, '0');
+            var d = dt.getDate().toString().padStart(2, 0);
+
+            // return y + '-' + m + '-' + d;
+
+            // ES6中的模板字符串
+            // ES6中的padStart 使用于给前面添加零的功能
+            if (pattern.toLowerCase() === 'yyyy-mm-dd') {
+                return `${y}-${m}-${d}`
+            } else {
+                var hh = dt.getHours().toString().padStart(2, 0);
+                var mm = dt.getMinutes().toString().padStart(2, 0);
+                var ss = dt.getSeconds().toString().padStart(2, 0);
+                return `${y}-${m}-${d}  ${hh}:${mm}:${ss}`
+            }
+        })
+
+        /*
+            自定义全局的指令
+
+                知识点：directive(指示,指令)  和钩子函数  inserted(插入的，嵌入的)
+
+                其中：参数1：指定的名称，在定义的时候，指令的名称前面，不需要加 v- 前缀
+                但是: 在调用的时候，必须 在指令名称前 加上 v- 前缀来进行调用
+                参数2：是一个对象，这个对象身上，有一些指令相关的函数，这些函数可以在特定的阶段，执行相关的操作
+        */
+        Vue.directive('focus', {
+            bind: function (e) {//每当指令绑定到元素上的时候，会立即执行这个 bind 函数，只执行一次
+                //注意： 在每个函数中，第一个参数，永远是el ，表示 被绑定了指令的那个元素 ，这个e 参数 是一个原生对象
+
+                // 因为 一个元素，只有插入DOM之后，才能获取焦点
+                // el.focus()
+                // 将来元素肯定会显示到页面中，这时候，浏览器的渲染引擎必然会解析样式，应用给这个元素
+                e.style.color = "red";
+            },
+            inserted: function (e) { // inserted 表示元素 插入到DOM中的时候，会执行 inserted 函数[触发一次]
+                e.focus();
+            },
+            updated: function (e) {  // 当 VNode更新的时候，会执行 updated，可能会触发多次
+
+            }
+        })
+        Vue.directive('color', {
+            bind: function (e) {
+                e.style.color = "red";
+            }
+        })
+
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                id: '',
+                name: '',
+                keywords: '',
+                list: [
+                    { id: 1, name: '奔驰', ctime: new Date() },
+                    { id: 2, name: '宝马', ctime: new Date() },
+                    { id: 3, name: '宝骏', ctime: new Date() },
+                ],
+            },
+            methods: {
+                add() {
+                    var car = { id: this.id, name: this.name, ctime: new Date() };
+                    this.list.push(car);
+                    this.id = this.name = "";
+                },
+                del(id) {  //根据ID删除数据
+                    //分析
+                    // 1.如何根据ID，找到要删除这一项的索引
+                    // 2.如果找到索引了，直接调用 数组的 splice 方法
+
+                    var index = this.list.findIndex(item => {
+                        if (item.id === id) {
+                            return true;
+                        }
+                    })
+                    this.list.splice(index, 1);
+                },
+                search(keywords) { //根据关键字，进行数据的搜索
+
+                    // 注意： forEach   some  filter   findIndex 这些都属于数组的新方法，
+                    //   都会对数组中的每一项，进行遍历 ， 执行相关的操作
+                    let newList = this.list.filter(item => {
+
+                        // 第二种判断方法   注意： ES6中的新方法  为字符串提供的  String.prototype.includes("字符串");
+                        //如果包含  就返回 true  否则返回false
+
+                        if (item.name.includes(keywords)) {
+                            return item;
+                        }
+                    })
+                    return newList;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

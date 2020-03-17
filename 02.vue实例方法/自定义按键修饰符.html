@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <div>
+                <h3>panel title</h3>
+            </div>
+            <div>
+                <label for="">ID:<input type="text" v-model="id" /></label>
+                <label for="">Name:<input type="text" v-model="name" @keyup.enter="add" /></label>
+                <input type="button" value="添加" class="" @click="add">
+                <label for="">搜索名称关键字:<input type="text" placeholder="请输入关键字" v-model="keywords"></label>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Ctime</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 之前， v-for中的数据，都是直接从data上的list中直接渲染过来的 -->
+                <!-- 现在，我们自定义了一个 search 方法，同时，把 所有关键字，通过传参的形式，传递给了
+                        search 方法
+                -->
+                <!-- 在search方法内部，通过 执行 for 循环， 把所有符合条件的数据，保存到 一个新数组中 返回-->
+                <tr v-for="item in search(keywords)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.ctime | capitalize}}</td>
+                    <td><button type="button" @click="del(item.id)">删除</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        //全局的过滤器，进行时间的格式化
+        Vue.filter('capitalize', function (dateStr,pattern="") {
+            console.log(pattern);
+            //根据指定的时间字符串，得到特定的时间
+            console.log(dateStr);
+            var dt = new Date(dateStr);
+
+            //yyyy-mm-dd
+            var y = dt.getFullYear();
+            var m = (dt.getMonth() + 1).toString().padStart(2,'0');
+            var d = dt.getDate().toString().padStart(2,0);
+
+            // return y + '-' + m + '-' + d;
+
+            // ES6中的模板字符串
+            // ES6中的padStart 使用于给前面添加零的功能
+            if(pattern.toLowerCase() === 'yyyy-mm-dd'){
+                return `${y}-${m}-${d}`
+            }else{
+                var hh = dt.getHours().toString().padStart(2,0);
+                var mm = dt.getMinutes().toString().padStart(2,0);
+                var ss = dt.getSeconds().toString().padStart(2,0);
+                return `${y}-${m}-${d}  ${hh}:${mm}:${ss}`
+            }
+        })
+
+
+        //自定义全局按键修饰符
+        // Vue.config.keyCodes.f2 = 113;  // 然后在需要的地方绑定上 改好的按键
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                id: '',
+                name: '',
+                keywords: '',
+                list: [
+                    { id: 1, name: '奔驰', ctime: new Date() },
+                    { id: 2, name: '宝马', ctime: new Date() },
+                    { id: 3, name: '宝骏', ctime: new Date() },
+                ],
+            },
+            methods: {
+                add() {   // 触发事件 添加数据
+                    var car = { id: this.id, name: this.name, ctime: new Date() };
+                    this.list.push(car);
+                    this.id = this.name = "";
+                    // this.list.forEach((v, i) => {
+                    //     console.log(this.id);
+                    //     if (v.id === this.id) {
+                    //         alert("已有ID,不能重复添加！");
+                    //         return;
+                    //     } else {
+                    //         this.list.push({ id: this.id, name: this.name, ctime: new Date() })
+                    //     }
+                    // });
+                },
+                del(id) {  //根据ID删除数据
+                    //分析
+                    // 1.如何根据ID，找到要删除这一项的索引
+                    // 2.如果找到索引了，直接调用 数组的 splice 方法
+
+                    //方法一 some
+                    // this.list.some((item, i) => {
+                    //     if (item.id === id) {
+                    //         //在 数组的 some 方法中，如果 return true ，就会立即终止这个数组的循环
+                    //         this.list.splice(i, 1);
+                    //         return true;
+                    //     }
+                    // })
+
+                    //方法二 findIndex
+                    var index = this.list.findIndex(item => {
+                        if (item.id === id) {
+                            return true;
+                        }
+                    })
+                    this.list.splice(index, 1);
+                },
+                search(keywords) { //根据关键字，进行数据的搜索
+                    // var newList = [];
+                    // this.list.forEach(item => {
+                    //     if(item.name.indexOf(keywords) != -1){
+                    //         newList.push(item);
+                    //     }
+                    // });
+                    // return newList;
+
+                    // 注意： forEach   some  filter   findIndex 这些都属于数组的新方法，
+                    //   都会对数组中的每一项，进行遍历 ， 执行相关的操作
+                    let newList = this.list.filter(item => {
+                        // 第一种判断方法
+                        // if(item.name.indexOf(keywords) != -1){
+
+                        // 第二种判断方法   注意： ES6中的新方法  为字符串提供的  String.prototype.includes("字符串");
+                        //如果包含  就返回 true  否则返回false
+
+                        if (item.name.includes(keywords)) {
+                            return item;
+                        }
+
+                        // 第三种判断方法 JQuery 中的 判断 :contain
+                        // if($(':contain(keywords)')){}
+
+                    })
+                    return newList;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
+
+<!-- 过滤器掉调用时候的格式  {{name}} -->

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 使用 v-cloak 能够解决 插值表达式闪烁的问题 -->
+        <p v-cloak> {{msg}}</p>
+        <!-- 默认 v-text 是没有闪烁问题的 
+                会覆盖元素中原本的内容  
+                插值表达式不会覆盖 
+                不能识别标签
+        -->
+        <h4 v-text="msg2"></h4>
+        <!-- 可以识别标签 -->        
+        <h4 v-html="msg2"></h4>
+    </div>
+    <script>
+        var vm=new Vue({
+           el:'#app',
+           data:{
+               msg:"我是谁",
+               msg2:'<h1>骚起来👌</h1>'
+           },
+           methods:{}
+        });
+    </script>
+</body>
+
+</html>

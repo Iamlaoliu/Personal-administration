@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        .inner {
+            height: 150px;
+            background-color: darkorange;
+        }
+
+        .middle {
+            height: 100px;
+            width: 100px;
+            margin: 0 auto;
+            background-color: rosybrown;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <!-- stop 阻止冒泡事件 -->
+        <!-- <div class="inner" @click="divClick">
+            <input type="button" value="戳死我" @click.stop="btnHandler" />
+        </div> -->
+
+        <!-- prevent 阻止之前有的行为 -->
+        <!-- <a href="https://cn.vuejs.org/v2/guide/instance.html" @click.prevent="preventHandler">vue官网</a> -->
+
+        <!-- capture 实现事件捕获事件的机制 -->
+        <!-- <div class="inner" @click.capture="divClick">
+            <input type="button" value="戳死我" @click="btnHandler" />
+        </div> -->
+
+        <!-- .once 只执行一次点击  如果我们在@click事件上添加.once修饰符，只要点击按钮只会执行一次。 -->
+        <!-- <a href="https://cn.vuejs.org/v2/guide/instance.html" @click.prevent.once="preventHandler">vue官网</a> -->
+
+
+
+        <!-- 演示 self 和 stop 的区别 -->
+        <!-- stop 演示 在点击上加上.stop相当于在每个方法中调用了等同于event.stopPropagation()，点击子节点不会捕获到父节点的事件 -->
+        <div class="inner" @click.stop="outer">
+            　　　　<div class="middle" @click.stop="middle">
+                　　　　<button @click.stop="inner">点击我(^_^)</button>
+                　　</div>
+        </div>
+        <p>{{ message }}</p>
+
+        <!-- self 演示 self只会触发自己范围内的事件，不会包含子元素。 -->
+        <!-- <div class="inner" @click.self="outer">
+    　　　　<div class="middle" @click.self="middle">
+        　　　　<button @click.self="inner">点击我(^_^)</button>
+        　　</div>
+        </div>
+        <p>{{ message }}</p> -->
+    </div>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                message: ''
+            },
+            methods: {
+                divClick() {
+                    console.log("这是触发div");
+                },
+                btnHandler() {
+                    console.log("btn触发");
+                },
+                preventHandler() {
+                    console.log("prevent 阻止之前有的行为触发")
+                },
+                inner: function () {
+                    this.message = 'inner： 这是最里面的Button'
+                },
+                middle: function () {
+                    this.message = 'middle: 这是中间的Div'
+                },
+                outer: function () {
+                    this.message = 'outer: 这是外面的Div'
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
