@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+    <link rel="stylesheet" href="../lib/animate.css">
+</head>
+
+<body>
+    <div id="app">
+        <button @click="show = !show">
+            Toggle
+        </button>
+        <!-- enter-active-class 开始动画属性名
+             leave-active-class 结束动画属性名
+             :duration  切换动画的时间
+             :duration{ enter:200,leave:400} 可以分别设置开始和结束的时长
+        -->
+        <!-- <transition enter-active-class="bounceIn" leave-active-class="bounceOut" :duration="200"> -->
+        <transition enter-active-class="bounceIn" leave-active-class="bounceOut" :duration={enter:200,leave:600}>
+            <p v-if="show">我是谁</p>
+        </transition>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                show: true
+            },
+            methods: {}
+        });
+    </script>
+</body>
+
+</html>

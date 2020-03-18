@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- <module1></module1> -->
+        <module2></module2>
+    </div>
+
+    <!-- 在 被控制的 #app外面，使用template 元素，定义组件的HTML模板结构-->
+    <template id="tmp1">
+        <div>
+            <h3>这是通过 template 元素，在外部定义的组件结构，这个方式，有代码提示的</h3>
+        </div>
+    </template>
+
+
+    <script>
+        /*
+            什么是组件：
+                拆分Vue实例的代码量，能够让我们以不同的组件，划分不同的模块，有复用的功能，就可以直接调用对应的组件即可
+            组件化与模块化的区别：
+                组件化：是从UI界面上划分的；前端的组件化，方便UI组件的重用
+
+                模块化：是从代码逻辑的角度划分的；方便代码分层开发，保证每个功能模块的职能单一
+        */
+
+        // 第一种创建方式 已经不提倡了  Vue.component("组件名",Vue.extend(){template: '<div>{{ text }}</div>',})
+
+        // 第二种创建组件的方法 此种创建组件没有代码提示
+        // Vue.component('module1',{
+        //     //注意：不论是那种方法创建出来的，组件的 template 属性指向的模板内容，必须有且只能有唯一的一个根元素
+        //     template:'<h3>这是直接使用 Vue.component 创建出来的组件</h3>'
+        // })
+
+        // 第三种创建组件的方法
+        Vue.component('module2',{
+            template:"#tmp1"
+        }) 
+
+        var vm=new Vue({
+           el:'#app',
+           data:{
+            
+           },
+           methods:{
+
+           }
+        });
+    </script>
+</body>
+
+</html>

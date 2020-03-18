@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        .component-fade-enter-active,
+        .component-fade-leave-active {
+            transition: opacity .3s ease;
+        }
+
+        .component-fade-enter,
+        .component-fade-leave-to {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <a href="" @click.prevent="toggle">登录</a>
+        <a href="" @click.prevent="toggle">注册</a>
+
+        <transition name="component-fade" mode="out-in">
+            <component :is="show"></component>
+        </transition>
+    </div>
+    <script>
+        Vue.component('login', {
+            template: '<h3>登录组件</h3>',
+        })
+        Vue.component('register', {
+            template: '<h3>注册组件</h3>',
+        })
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                show: 'login'
+            },
+            methods: {
+                toggle(e) {
+                    if (this.show == "login") {
+                        this.show = "register"
+                    } else {
+                        this.show = "login"
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

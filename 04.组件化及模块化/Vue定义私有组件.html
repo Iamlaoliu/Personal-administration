@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <login></login>
+    </div>
+    
+    <div id="app1">
+        <login></login>
+        <!-- 
+            did you register the component correctly? For recursive components, make sure to provide the "name" option. 
+            调用别人的私有组件会发出错误提示        你注册的组件正确吗?对于递归组件，请确保提供“name”选项。
+        -->
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            methods: {
+
+            },
+            components: {
+                // 定义私有组件
+                login: {
+                    template: "<h1>这是私有的login组件</h1>"
+                }
+            }
+        });
+
+        var vm1 = new Vue({
+            el:'#app1',
+        })
+    </script>
+</body>
+
+</html>
