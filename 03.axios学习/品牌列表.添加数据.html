@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+    <script src="../lib/vue-resource.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <ul v-for="item in list" :key="item.id">
+            <li>{{item.id}}</li>
+            <li>{{item.name}}</li>
+            <li @click="add">添加</li>
+        </ul>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                list: [
+                    { id: 1, name: '我是谁' },
+                    { id: 2, name: '怎么一个人住' },
+                    { id: 3, name: '我从哪来' },
+                    { id: 4, name: '又要去向何处' },
+                ]
+            },
+            created() {
+                this.getInfo();
+            },
+            methods: {
+                getInfo() {
+                    // 当发起get请求之后，通过 .then 来设置成功得回调函数
+                    // this.$http.get('http://vue.studyit.io/api/getlunbo').then(function (result) {
+                    //     console.log(result);
+                    // })
+                },
+                add() {
+                    // 添加数据格式
+
+                    // this.$axios.get("添加的AIP",第二个参数是要添加的对象).then(result => {
+                    //     console.log(result);
+                    //     if (result.body.status === 0) {
+                    //         alert("添加成功!");
+                    //         // this.getInfo(); 更新数据
+                    //     }else{
+                    //         alert("添加失败！");
+                    //     }
+                    // })
+
+                    // axios传递参数的格式
+                    // axios.get('/user', {
+                    //     params: {
+                    //         ID: 12345
+                    //     }
+                    // })
+                    //     .then(function (response) {
+                    //         console.log(response);
+                    //     })
+                    //     .catch(function (error) {
+                    //         console.log(error);
+                    //     });
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>
