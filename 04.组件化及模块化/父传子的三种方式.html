@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>悟空，摇头了</title>
+    <script src="../lib/vue.js"></script>
+    <style>
+        ul li {
+            list-style: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #app {
+            width: 1000px;
+            margin: 0 auto;
+        }
+
+        #app ul {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
+        }
+
+        #app ul li {
+            width: 25%;
+            padding: 25px;
+        }
+
+        #app ul li img {
+            height: 200px;
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <my-content :shop='list' :num="list.length"></my-content>
+    </div>
+    <template id="content">
+        <ul>
+            <li v-for="(item, index) in shop" :key='index'>
+                <img :src="item.img" alt="">
+                <p>{{ item.title }}</p>
+            </li>
+        </ul>
+    </template>
+    <script>
+
+        const Content = {
+            template: "#content",
+            // props: ['shop'],
+            // props: {
+            //     shop: Array
+            //   },
+            props: {
+                shop: {
+                    type: Array,
+                    default: function () {
+
+                    }
+                }
+            }
+        }
+        new Vue({
+
+            el: '#app',
+
+            data: {
+                list: [{
+
+                    img: 'https://img12.360buyimg.com/n7/jfs/t1/59022/28/10293/141808/5d78088fEf6e7862d/68836f52ffaaad96.jpg',
+
+                    title: 'Apple iPhone 11 (A2223) 128GB 黑色 移动联通电信4G手机 双卡双待'
+
+                }, {
+
+                    img: 'https://m.360buyimg.com/mobilecms/s750x750_jfs/t23386/9/1066712099/277967/615ccafb/5b4f0e3aN262237fc.jpg!q80.dpg.webp',
+
+                    title: '【官方AppleCare+版】Apple MacBook Pro 15.4英寸笔记本电脑 深空灰色 配备Touch Bar 2018新款(八代i5/16G)'
+
+                }, {
+
+                    img: 'https://img13.360buyimg.com/n7/jfs/t1/51521/12/10437/169738/5d780c40Eda0f0e1d/ccbc7745b343f87d.jpg',
+
+                    title: 'Apple iPhone 11 Pro Max (A2220) 256GB 暗夜绿色 移动联通电信4G手机 双卡双待'
+
+                }, {
+
+                    img: 'https://img11.360buyimg.com/n7/jfs/t1/53688/36/14138/113224/5db03763Ee6d8b784/5f5a3f4ce7490d36.jpg',
+
+                    title: '【超级爆品】一加 OnePlus 7 Pro 2K+90Hz 流体屏 骁龙855旗舰 4800'
+
+                }]
+
+            },
+
+            components: {
+
+                'my-content': Content
+
+            }
+
+        })
+    </script>
+</body>
+
+</html>
