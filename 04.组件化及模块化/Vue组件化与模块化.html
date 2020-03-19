@@ -13,6 +13,7 @@
     <div id="app">
         <!-- <module1></module1> -->
         <module2></module2>
+        <mylogin></mylogin>
     </div>
 
     <!-- 在 被控制的 #app外面，使用template 元素，定义组件的HTML模板结构-->
@@ -45,6 +46,12 @@
         Vue.component('module2',{
             template:"#tmp1"
         }) 
+
+        // 第四种创建组件的方式
+        var login = {
+            template:'<h1>我是谁</h1>'
+        }
+        Vue.component('mylogin',login);
 
         var vm=new Vue({
            el:'#app',

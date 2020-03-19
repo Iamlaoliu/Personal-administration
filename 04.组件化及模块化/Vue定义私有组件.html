@@ -13,7 +13,7 @@
     <div id="app">
         <login></login>
     </div>
-    
+
     <div id="app1">
         <login></login>
         <!-- 
@@ -22,6 +22,7 @@
         -->
     </div>
     <script>
+        var login = { template: "<h1>这是私有的login组件</h1>" }
         var vm = new Vue({
             el: '#app',
             data: {
@@ -32,14 +33,15 @@
             },
             components: {
                 // 定义私有组件
-                login: {
-                    template: "<h1>这是私有的login组件</h1>"
-                }
+                // login: {
+                //     template: "<h1>这是私有的login组件</h1>"
+                // }
+                login
             }
         });
 
         var vm1 = new Vue({
-            el:'#app1',
+            el: '#app1',
         })
     </script>
 </body>
